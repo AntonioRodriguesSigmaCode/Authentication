@@ -10,10 +10,4 @@
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Dto\" />
-    <Folder Include="Service\" />
-  </ItemGroup>
-
 </Project>
