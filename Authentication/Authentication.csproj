@@ -10,9 +10,4 @@
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dto\User\" />
-    <Folder Include="Dto\Token\" />
-  </ItemGroup>
-
 </Project>
