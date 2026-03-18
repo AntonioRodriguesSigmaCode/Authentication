@@ -69,7 +69,7 @@ namespace projetoAPI.Service
             if (string.IsNullOrEmpty(secretKey))
                 throw new Exception("JWT SecretKey não configurada!");
 
-            var roles = await _context.UtilizadorRoles
+            var roles = await _context.UtilizadorRole
                 .Where(ur => ur.UtilizadorId == user.Id)
                 .Select(ur => ur.Role.Nome)
                 .ToListAsync();

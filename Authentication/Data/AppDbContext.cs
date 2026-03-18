@@ -18,8 +18,8 @@ namespace projetoAPI.Data
 		public DbSet<Role> Roles { get; set; }
 		public DbSet<Permissao> Permissoes { get; set; }
 
-		public DbSet<UtilizadorRole> UtilizadorRoles { get; set; }
-		public DbSet<RolePermissao> RolePermissoes { get; set; }
+		public DbSet<UtilizadorRole> UtilizadorRole { get; set; }
+		public DbSet<RolePermissao> RolePermissoe { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -28,6 +28,9 @@ namespace projetoAPI.Data
 
 			modelBuilder.Entity<RolePermissao>()
 				.HasKey(rp => new { rp.RoleId, rp.PermissaoId });
+
+			modelBuilder.Entity<UtilizadorRole>()
+				.ToTable("UtilizadorRole");
 		}
 	}
 }
