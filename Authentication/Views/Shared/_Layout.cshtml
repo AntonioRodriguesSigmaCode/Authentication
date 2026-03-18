@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Authentication</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Authentication.styles.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100">   
+
+    <div class="d-flex" style="min-height: 100vh;">
+
+        <!-- SIDEBAR -->
+        <div class="bg-light border-end" style="width: 250px;">
+            <div class="p-3">
+                <h4>Authentication</h4>
+                <hr />
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li>
+                        <a class="nav-link text-dark" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO -->
+        <div class="flex-grow-1 p-4">
+            @RenderBody()
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-top text-muted p-3 mt-auto">
+        <div class="container">
+            &copy; 2026 - Authentication -
+            <a asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+</body>
+</html>
