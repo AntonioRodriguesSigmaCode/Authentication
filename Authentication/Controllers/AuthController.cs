@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using projetoAPI.Dto.Token;
-using projetoAPI.Dto.User;
-using projetoAPI.Model;
-using projetoAPI.Service;
+using Authentication.Dto.Token;
+using Authentication.Dto.User;
+using Authentication.Model;
+using Authentication.Service;
 
 namespace Authentication.Controllers
 {
@@ -22,7 +22,7 @@ namespace Authentication.Controllers
 		{
 			var user = await _authService.RegisterAsync(request);
 
-			if (user == null)
+			if (user is null)
 				return BadRequest("Username já existe");
 
 			return Ok(user);

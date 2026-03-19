@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using projetoAPI.Data;
-using projetoAPI.Dto.Token;
-using projetoAPI.Dto.User;
-using projetoAPI.Model;
+using Authentication.Dto.Token;
+using Authentication.Dto.User;
+using Authentication.Models;
+using Authentication.Data;
+using Authentication.Model;
+using System.Runtime.CompilerServices;
 
-namespace projetoAPI.Service
+namespace Authentication.Service
 {
     public class AuthService : IAuthService
     {
@@ -30,12 +32,12 @@ namespace projetoAPI.Service
         public async Task<Utilizador?> RegisterAsync(UserRegisterDto request)
         {
             // verificar se já existe algum uername na bd
-            if (await _context.Utilizadores.AnyAsync(u => u.Username == request.Username))
+            if (await _context.Utilizadores.AnyAsync(u => u.UserName == request.Username))
                 return null;
 
             var user = new Utilizador
             {
-                Username = request.Username
+                UserName = request.Username
             };
 
             user.PasswordHash = new PasswordHasher<Utilizador>().HashPassword(user, request.Password);
@@ -47,7 +49,7 @@ namespace projetoAPI.Service
 
         public async Task<TokenResponseDto?> LoginAsync(UserLoginDto request)
         {
-			var user = await _context.Utilizadores.FirstOrDefaultAsync(u => u.Username == request.Username);
+			var user = await _context.Utilizadores.FirstOrDefaultAsync(u => u.UserName == request.Username);
 			if (user == null) return null;
 
 			var passwordCheck = new PasswordHasher<Utilizador>().VerifyHashedPassword(user, user.PasswordHash, request.Password);
@@ -70,14 +72,14 @@ namespace projetoAPI.Service
                 throw new Exception("JWT SecretKey não configurada!");
 
             var roles = await _context.UtilizadorRole
-                .Where(ur => ur.UtilizadorId == user.Id)
+                .Where(ur => ur.Utilizador == user)
                 .Select(ur => ur.Role.Nome)
                 .ToListAsync();
 
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Name, user.UserName),
             };
 
             foreach (var role in roles)
@@ -112,7 +114,7 @@ namespace projetoAPI.Service
 		{
 			var refreshToken = GenerateRefreshToken();
 			user.RefreshToken = refreshToken;
-			user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(int.Parse(_configuration["JwtSettings:RefreshTokenExpirationDays"]));
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(int.Parse(_configuration["JwtSettings:RefreshTokenExpirationDays"]));
 			_context.Utilizadores.Update(user);
 			await _context.SaveChangesAsync();
 			return refreshToken;
@@ -129,10 +131,12 @@ namespace projetoAPI.Service
 		private async Task<Utilizador?> ValidateRefreshTokenAsync(int userId, string refreshToken)
 		{
 			var user = await _context.Utilizadores.FindAsync(userId);
-			if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+			if (user == null ||user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow
+            )
 				return null;
 
 			return user;
 		}
+
 	}
 }

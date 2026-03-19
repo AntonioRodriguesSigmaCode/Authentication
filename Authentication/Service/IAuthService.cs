@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using projetoAPI.Dto.Token;
-using projetoAPI.Model;
-using projetoAPI.Dto.User;
+using Authentication.Dto.Token;
+using Authentication.Models;
+using Authentication.Dto.User;
+using Authentication.Model;
 
-namespace projetoAPI.Service
+namespace Authentication.Service
 {
     public interface IAuthService
     {
