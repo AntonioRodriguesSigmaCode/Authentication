@@ -18,19 +18,20 @@ namespace projetoAPI.Data
 		public DbSet<Role> Roles { get; set; }
 		public DbSet<Permissao> Permissoes { get; set; }
 
-		public DbSet<UtilizadorRole> UtilizadorRole { get; set; }
-		public DbSet<RolePermissao> RolePermissoe { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<UtilizadorRole>()
-				.HasKey(ur => new { ur.UtilizadorId, ur.RoleId });
+			// relação entre utiliador e roles (Muito para Muitos)
+			modelBuilder.Entity<Utilizador>()
+				.HasMany(e => e.Roles)
+				.WithMany(e => e.Utilizadores)
+				.UsingEntity(e => e.ToTable("UtilizadorRoles"));
 
-			modelBuilder.Entity<RolePermissao>()
-				.HasKey(rp => new { rp.RoleId, rp.PermissaoId });
-
-			modelBuilder.Entity<UtilizadorRole>()
-				.ToTable("UtilizadorRole");
+			// relação entre role e permissao (Um para Muitos)
+			modelBuilder.Entity<Role>()
+				.HasMany(e => e.Permissoes)
+				.WithOne(e => e.Role)
+				.HasForeignKey(e => e.RoleId);
 		}
 	}
 }

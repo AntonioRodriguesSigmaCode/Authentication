@@ -1,4 +1,6 @@
 using System.Text;
+using Authentication.Interface;
+using Authentication.Repositoy;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -47,6 +49,7 @@ builder.Services.AddAuthentication(options =>
 // 3️⃣ Services
 // -----------------------
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // CORS
 builder.Services.AddCors(options =>

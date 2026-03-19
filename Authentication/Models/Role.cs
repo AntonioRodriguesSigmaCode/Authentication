@@ -10,7 +10,7 @@ namespace projetoAPI.Model
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
 
-        public ICollection<UtilizadorRole> UtilizadorRoles { get; set; }
-        public ICollection<RolePermissao> RolePermissoes { get; set; }
+        public ICollection<Utilizador> Utilizadores { get; set; }
+        public ICollection<Permissao> Permissoes { get; set; }
     }
 }

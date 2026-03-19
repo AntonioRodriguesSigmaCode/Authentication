@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Authentication.Interface;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using projetoAPI.Dto.Token;
 using projetoAPI.Dto.User;
@@ -12,10 +13,12 @@ namespace Authentication.Controllers
 	public class AuthController : ControllerBase
 	{
 		private readonly IAuthService _authService;
+		private readonly IUserRepository _repo;
 
-		public AuthController(IAuthService authService)
+		public AuthController(IAuthService authService, IUserRepository repo)
 		{
 			_authService = authService;
+			_repo = repo;
 		}
 		[HttpPost("register")]
 		public async Task<IActionResult> Register(UserRegisterDto request)
@@ -50,5 +53,26 @@ namespace Authentication.Controllers
 			return Ok(result);
 		}
 
+		[HttpPost("create-role")]
+		public async Task<IActionResult> CreateRole(string nome)
+		{
+			var role = await _repo.CreateRoleAsync(nome);
+
+			if (role == null)
+				return BadRequest("Já existe uma role com esse nome");
+
+			return Ok(role);
+		}
+		/*[HttpPost("atribuir-role")]
+		public async Task<IActionResult> AtribuirRole(int userId, int roleId)
+		{
+			var role = await _repo.AtribuirRoleAsync(userId, roleId);
+
+			if (role == null)
+				return BadRequest("O utilizador já tem essa role");
+
+			return Ok(role);
+		}*/
+		
 	}
 }

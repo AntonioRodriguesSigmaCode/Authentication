@@ -7,11 +7,14 @@ namespace projetoAPI.Model
 {
     public class Utilizador
     {
-        public int Id { get; set; }
-        public string Username { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
-        public string? RefreshToken { get; set; } 
-        public DateTime? RefreshTokenExpiryTime { get; set; }
+		public int Id { get; set; }
+		public string Username { get; set; } = string.Empty;
+		public string PasswordHash { get; set; } = string.Empty;
 
-    }
+		public string? RefreshToken { get; set; }  
+		public DateTime? RefreshTokenExpiryTime { get; set; }
+
+		public ICollection<Role> Roles { get; set; }
+
+	}
 }
