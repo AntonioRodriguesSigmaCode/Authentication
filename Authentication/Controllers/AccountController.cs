@@ -4,6 +4,7 @@ using Authentication.Service;
 using Authentication.Dto.User;
 using Microsoft.AspNetCore.Identity;
 using Authentication.Model;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Authentication.Controllers
 {
@@ -73,10 +74,26 @@ namespace Authentication.Controllers
 			return RedirectToAction("PaginaInicial", "Account");
 		}
 
+		[Authorize]
 		[HttpGet]
 		public IActionResult PaginaInicial()
 		{
 			return View();
+		}
+
+		[Authorize]
+		[HttpGet]
+		public async Task<IActionResult> Dashboard()
+		{
+			var user = await _signInManager.UserManager.GetUserAsync(User);
+			return View(user);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Logout()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction("Login", "Account");
 		}
 	}
 }
