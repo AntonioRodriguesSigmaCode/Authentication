@@ -1,0 +1,17 @@
+﻿@model Authentication.Model.Utilizador
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2>Dashboard</h2>
+    <hr />
+
+    <div class="card p-4 shadow" style="max-width: 400px;">
+        <h5>Informações do Utilizador</h5>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Username:</strong> @Model.UserName</p>
+    </div>
+</div>
