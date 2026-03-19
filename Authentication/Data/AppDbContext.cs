@@ -4,11 +4,13 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using projetoAPI.Model;
+using Authentication.Models;
+using Authentication.Model;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace projetoAPI.Data
+namespace Authentication.Data
 {
-	public class AppDbContext : DbContext
+	public class AppDbContext : IdentityDbContext<Utilizador>
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
 		{
@@ -23,6 +25,8 @@ namespace projetoAPI.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			base.OnModelCreating(modelBuilder);
+
 			modelBuilder.Entity<UtilizadorRole>()
 				.HasKey(ur => new { ur.UtilizadorId, ur.RoleId });
 

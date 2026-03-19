@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace projetoAPI.Dto.Token
+namespace Authentication.Dto.Token
 {
     public class RefreshTokenRequestDto
     {
