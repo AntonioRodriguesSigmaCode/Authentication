@@ -10,7 +10,7 @@ namespace projetoAPI.Model
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
 
-		public int RoleId { get; set; }
-		public Role Role { get; set; }
+		public int? RoleId { get; set; }
+		public Role? Role { get; set; }
 	}
 }

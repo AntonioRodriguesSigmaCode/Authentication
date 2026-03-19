@@ -14,38 +14,19 @@ namespace Authentication.Repositoy
 		{
 			_context = context;
 		}
-		//public async Task<UtilizadorRole> AtribuirRoleAsync(int userId, int roleId)
-		/*{
-			var existe = await _context.UtilizadorRole
-				.AnyAsync(rp => rp.UtilizadorId == userId && rp.RoleId == roleId);
 
-			if (existe)
-				return null;
-
-			var utilizadorRole = new UtilizadorRole
-			{
-				UtilizadorId = userId,
-				RoleId = roleId
-			};
-
-			_context.UtilizadorRole.Add(utilizadorRole);
-			await _context.SaveChangesAsync();
-
-			return utilizadorRole;
-		}*/
-
-		public async Task<Role?> CreateRoleAsync(string nomeRole)
+		public async Task<Permissao> CreatePermissaoAsync(string nomePermissao)
 		{
-			var existe = await _context.Roles.AnyAsync(x => x.Nome == nomeRole);
+			var existe = await _context.Permissoes.FirstOrDefaultAsync(x => x.Nome == nomePermissao);
 
-			if (existe)
+			if (existe == null)
 				return null;
 
-			var role = new Role { Nome = nomeRole };
-			_context.Roles.Add(role);
+			var permissao = new Permissao { Nome = nomePermissao };
+			_context.Permissoes.Add(permissao);
 			await _context.SaveChangesAsync();
 
-			return role;
+			return permissao;
 		}
 	}
 }

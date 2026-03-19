@@ -50,6 +50,8 @@ builder.Services.AddAuthentication(options =>
 // -----------------------
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IPermissaoRepository, PermissaoRepository>();
 
 // CORS
 builder.Services.AddCors(options =>
