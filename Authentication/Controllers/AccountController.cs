@@ -52,10 +52,17 @@ namespace Authentication.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
-			var user = new Utilizador { UserName = model.Email, Email = model.Email };
+			var user = new Utilizador
+			{
+				UserName = model.Email,
+				Email = model.Email,
+				RefreshToken = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)),
+				RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7)
+			};
+
 			var result = await _signInManager.UserManager.CreateAsync(user, model.Password);
 
-			if(!result.Succeeded)
+			if (!result.Succeeded)
 			{
 				foreach (var error in result.Errors)
 					ModelState.AddModelError("", error.Description);
