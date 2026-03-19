@@ -1,10 +1,13 @@
-﻿using Authentication.ViewModel;
-using Microsoft.AspNetCore.Mvc;
-using Authentication.Service;
+﻿using System.Security.Claims;
 using Authentication.Dto.User;
-using Microsoft.AspNetCore.Identity;
 using Authentication.Model;
+using Authentication.Service;
+using Authentication.ViewModel;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Authentication.Controllers
 {
@@ -21,6 +24,9 @@ namespace Authentication.Controllers
 		[HttpGet]
 		public IActionResult Login()
 		{
+			if (User.Identity!.IsAuthenticated)
+				return View("SessionAlreadyOn");
+
 			return View();
 		}
 
@@ -30,12 +36,32 @@ namespace Authentication.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
-			var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+			var result = await _signInManager.PasswordSignInAsync(
+				model.Email,
+				model.Password,
+				isPersistent: model.RememberMe,
+				lockoutOnFailure: false);
 
 			if (!result.Succeeded)
 			{
 				ModelState.AddModelError("", "Email ou Senha incorreta");
 				return View(model);
+			}
+
+			var user = await _signInManager.UserManager.FindByEmailAsync(model.Email);
+
+			if (!model.RememberMe)
+			{
+				var sessionToken = Guid.NewGuid().ToString();
+				user!.SessionToken = sessionToken;
+				await _signInManager.UserManager.UpdateAsync(user);
+
+				HttpContext.Session.SetString("SessionToken", sessionToken);
+			}
+			else
+			{
+				user!.SessionToken = null;
+				await _signInManager.UserManager.UpdateAsync(user);
 			}
 
 			return RedirectToAction("PaginaInicial", "Account");
@@ -44,6 +70,8 @@ namespace Authentication.Controllers
 		[HttpGet]
 		public IActionResult Register()
 		{
+			if (User.Identity!.IsAuthenticated)
+				return View("SessionAlreadyOn");
 			return View();
 		}
 
