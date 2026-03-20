@@ -1,4 +1,5 @@
-﻿using Authentication.ViewModel;
+﻿using Authentication.Models;
+using Authentication.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -10,8 +11,8 @@ namespace Authentication.Controllers
 	public class AccountController : Controller
 
 	{
-		private readonly SignInManager<IdentityUser> _signInManager;
-		public AccountController(SignInManager<IdentityUser> signInManager)
+		private readonly SignInManager<ApplicationUser> _signInManager;
+		public AccountController(SignInManager<ApplicationUser> signInManager)
 		{
 			_signInManager = signInManager; 
 		}
@@ -29,11 +30,9 @@ namespace Authentication.Controllers
 		}
 
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginViewModel model)
 		{
-			foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-				Console.WriteLine($"Erro: {error.ErrorMessage}");
-
 			if (!ModelState.IsValid)
 				return View(model);
 
@@ -41,7 +40,7 @@ namespace Authentication.Controllers
 				model.Email,
 				model.Password,
 				isPersistent: model.RememberMe,
-				lockoutOnFailure: false);
+				lockoutOnFailure: true);
 
 			if (!result.Succeeded)
 			{
@@ -49,8 +48,6 @@ namespace Authentication.Controllers
 				return View(model);
 			}
 
-			var user = await _signInManager.UserManager.FindByEmailAsync(model.Email);
-			 
 			return RedirectToAction("PaginaInicial", "Account");
 		}
 
@@ -66,15 +63,16 @@ namespace Authentication.Controllers
 		}
 
 		[HttpPost]
-		public  async Task<IActionResult> Register(RegisterViewModel model)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Register(RegisterViewModel model)
 		{
 			if (!ModelState.IsValid)
 				return View(model);
 
-			var user = new IdentityUser
+			var user = new ApplicationUser
 			{
 				UserName = model.Email,
-				Email = model.Email,
+				Email = model.Email
 			};
 
 			var result = await _signInManager.UserManager.CreateAsync(user, model.Password);
@@ -89,6 +87,7 @@ namespace Authentication.Controllers
 			await _signInManager.SignInAsync(user, isPersistent: false);
 			return RedirectToAction("PaginaInicial", "Account");
 		}
+
 
 		[Authorize]
 		[HttpGet]
@@ -106,10 +105,12 @@ namespace Authentication.Controllers
 		}
 
 		[HttpPost]
+		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Logout()
 		{
 			await _signInManager.SignOutAsync();
 			return RedirectToAction("Login", "Account");
 		}
+
 	}
 }
