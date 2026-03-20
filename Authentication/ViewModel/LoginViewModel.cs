@@ -4,9 +4,11 @@ namespace Authentication.ViewModel
 {
 	public class LoginViewModel
 	{
-		[Required]
+		[Required (ErrorMessage = "O email é obrigátorio")]
+		[EmailAddress (ErrorMessage = "Email Inválido")]
+
 		public string Email { get; set; } = string.Empty;
-		[Required]
+		[Required (ErrorMessage = "A Password é Obrigátorio")]
 		public string Password { get; set; } = string.Empty;
 		public bool RememberMe { get; set; }	
 	}
