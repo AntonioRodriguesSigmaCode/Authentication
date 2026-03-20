@@ -1,8 +1,4 @@
-﻿using System.Security.Claims;
-using Authentication.Dto.User;
-using Authentication.Model;
-using Authentication.Service;
-using Authentication.ViewModel;
+﻿using Authentication.ViewModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -12,12 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Authentication.Controllers
 {
 	public class AccountController : Controller
+
 	{
-		private readonly SignInManager<Utilizador> _signInManager;
-		private readonly IAuthService _authService;
-		public AccountController(IAuthService authService, SignInManager<Utilizador> signInManager)
+		private readonly SignInManager<IdentityUser> _signInManager;
+		public AccountController(SignInManager<IdentityUser> signInManager)
 		{
-			_authService = authService;
 			_signInManager = signInManager; 
 		}
 
@@ -25,7 +20,10 @@ namespace Authentication.Controllers
 		public IActionResult Login()
 		{
 			if (User.Identity!.IsAuthenticated)
-				return View("SessionAlreadyOn");
+			{
+				TempData["AlreadyLoggedIn"] = "Já tens uma sessão iniciada.";
+				return RedirectToAction("PaginaInicial");
+			}
 
 			return View();
 		}
@@ -33,11 +31,6 @@ namespace Authentication.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Login(LoginViewModel model)
 		{
-			Console.WriteLine($"Email: {model.Email}");
-			Console.WriteLine($"Password: {model.Password}");
-			Console.WriteLine($"RememberMe: {model.RememberMe}");
-			Console.WriteLine($"ModelState válido: {ModelState.IsValid}");
-
 			foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
 				Console.WriteLine($"Erro: {error.ErrorMessage}");
 
@@ -57,20 +50,6 @@ namespace Authentication.Controllers
 			}
 
 			var user = await _signInManager.UserManager.FindByEmailAsync(model.Email);
-
-			if (!model.RememberMe)
-			{
-				var sessionToken = Guid.NewGuid().ToString();
-				user!.SessionToken = sessionToken;
-				await _signInManager.UserManager.UpdateAsync(user);
-
-				HttpContext.Session.SetString("SessionToken", sessionToken);
-			}
-			else
-			{
-				user!.SessionToken = null;
-				await _signInManager.UserManager.UpdateAsync(user);
-			}
 			 
 			return RedirectToAction("PaginaInicial", "Account");
 		}
@@ -79,7 +58,10 @@ namespace Authentication.Controllers
 		public IActionResult Register()
 		{
 			if (User.Identity!.IsAuthenticated)
-				return View("SessionAlreadyOn");
+			{
+				TempData["AlreadyLoggedIn"] = "Já tens uma sessão iniciada.";
+				return RedirectToAction("PaginaInicial");
+			}
 			return View();
 		}
 
@@ -89,12 +71,10 @@ namespace Authentication.Controllers
 			if (!ModelState.IsValid)
 				return View(model);
 
-			var user = new Utilizador
+			var user = new IdentityUser
 			{
 				UserName = model.Email,
 				Email = model.Email,
-				RefreshToken = Convert.ToBase64String(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)),
-				RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7)
 			};
 
 			var result = await _signInManager.UserManager.CreateAsync(user, model.Password);
