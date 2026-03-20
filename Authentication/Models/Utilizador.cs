@@ -15,6 +15,7 @@ namespace Authentication.Model
         public DateTime? RefreshTokenExpiryTime { get; set; }
 		public string? SessionToken { get; set; }
 
+		public ICollection<Role> Roles { get; set; }
 
 	}
 }

@@ -71,10 +71,10 @@ namespace Authentication.Service
             if (string.IsNullOrEmpty(secretKey))
                 throw new Exception("JWT SecretKey não configurada!");
 
-            var roles = await _context.UtilizadorRole
-                .Where(ur => ur.Utilizador == user)
-                .Select(ur => ur.Role.Nome)
-                .ToListAsync();
+            //var roles = await _context.UtilizadorRole
+            //    .Where(ur => ur.Utilizador == user)
+            //    .Select(ur => ur.Role.Nome)
+            //    .ToListAsync();
 
             var claims = new List<Claim>
             {
@@ -82,10 +82,10 @@ namespace Authentication.Service
                 new Claim(ClaimTypes.Name, user.UserName),
             };
 
-            foreach (var role in roles)
+            /*foreach (var role in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+            }*/
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);

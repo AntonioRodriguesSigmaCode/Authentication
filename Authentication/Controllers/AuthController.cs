@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Authentication.Interface;
+using Authentication.Mappers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Authentication.Dto.Token;
 using Authentication.Dto.User;
@@ -12,11 +14,14 @@ namespace Authentication.Controllers
 	public class AuthController : ControllerBase
 	{
 		private readonly IAuthService _authService;
+		private readonly IUserRepository _repo;
 
-		public AuthController(IAuthService authService)
+		public AuthController(IAuthService authService, IUserRepository repo)
 		{
 			_authService = authService;
+			_repo = repo;
 		}
+
 		[HttpPost("register")]
 		public async Task<IActionResult> Register(UserRegisterDto request)
 		{
@@ -50,5 +55,9 @@ namespace Authentication.Controllers
 			return Ok(result);
 		}
 
+
+
+		
+		
 	}
 }

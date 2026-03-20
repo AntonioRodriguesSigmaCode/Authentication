@@ -10,6 +10,7 @@ namespace Authentication.Model
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
 
-        public ICollection<RolePermissao> RolePermissoes { get; set; }
-    }
+		public int? RoleId { get; set; }
+		public Role? Role { get; set; }
+	}
 }
