@@ -13,6 +13,7 @@ namespace Authentication.Model
         //public string PasswordHash { get; set; } = string.Empty;
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
+		public string? SessionToken { get; set; }
 
 		public ICollection<Role> Roles { get; set; }
 

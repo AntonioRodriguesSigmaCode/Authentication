@@ -4,6 +4,7 @@ using Authentication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Authentication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260319160901_AddSessionToken")]
+    partial class AddSessionToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,12 +37,7 @@ namespace Authentication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Permissoes");
                 });
@@ -304,40 +302,16 @@ namespace Authentication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RoleUtilizador", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UtilizadoresId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("RolesId", "UtilizadoresId");
-
-                    b.HasIndex("UtilizadoresId");
-
-                    b.ToTable("RoleUtilizador");
-                });
-
-            modelBuilder.Entity("Authentication.Model.Permissao", b =>
-                {
-                    b.HasOne("Authentication.Model.Role", "Role")
-                        .WithMany("Permissoes")
-                        .HasForeignKey("RoleId");
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("Authentication.Model.RolePermissao", b =>
                 {
                     b.HasOne("Authentication.Model.Permissao", "Permissao")
-                        .WithMany()
+                        .WithMany("RolePermissoes")
                         .HasForeignKey("PermissaoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Authentication.Model.Role", "Role")
-                        .WithMany()
+                        .WithMany("RolePermissoes")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -350,7 +324,7 @@ namespace Authentication.Migrations
             modelBuilder.Entity("Authentication.Model.UtilizadorRole", b =>
                 {
                     b.HasOne("Authentication.Model.Role", "Role")
-                        .WithMany()
+                        .WithMany("UtilizadorRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -417,24 +391,16 @@ namespace Authentication.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoleUtilizador", b =>
+            modelBuilder.Entity("Authentication.Model.Permissao", b =>
                 {
-                    b.HasOne("Authentication.Model.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Authentication.Model.Utilizador", null)
-                        .WithMany()
-                        .HasForeignKey("UtilizadoresId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("RolePermissoes");
                 });
 
             modelBuilder.Entity("Authentication.Model.Role", b =>
                 {
-                    b.Navigation("Permissoes");
+                    b.Navigation("RolePermissoes");
+
+                    b.Navigation("UtilizadorRoles");
                 });
 #pragma warning restore 612, 618
         }
