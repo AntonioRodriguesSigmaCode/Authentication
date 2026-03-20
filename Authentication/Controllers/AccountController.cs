@@ -33,6 +33,14 @@ namespace Authentication.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Login(LoginViewModel model)
 		{
+			Console.WriteLine($"Email: {model.Email}");
+			Console.WriteLine($"Password: {model.Password}");
+			Console.WriteLine($"RememberMe: {model.RememberMe}");
+			Console.WriteLine($"ModelState válido: {ModelState.IsValid}");
+
+			foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+				Console.WriteLine($"Erro: {error.ErrorMessage}");
+
 			if (!ModelState.IsValid)
 				return View(model);
 
@@ -63,7 +71,7 @@ namespace Authentication.Controllers
 				user!.SessionToken = null;
 				await _signInManager.UserManager.UpdateAsync(user);
 			}
-
+			 
 			return RedirectToAction("PaginaInicial", "Account");
 		}
 

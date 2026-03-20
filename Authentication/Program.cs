@@ -36,17 +36,12 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 			var user = await userManager.GetUserAsync(context.Principal!);
 
-			Console.WriteLine($"User: {user?.Email}");
-			Console.WriteLine($"SessionToken BD: {user?.SessionToken}");
-			Console.WriteLine($"SessionToken Sessão: {context.HttpContext.Session.GetString("SessionToken")}");
-
 			if (user?.SessionToken != null)
 			{
 				var sessionToken = context.HttpContext.Session.GetString("SessionToken");
 
 				if (sessionToken == null || sessionToken != user.SessionToken)
 				{
-					Console.WriteLine(">>> REJEITANDO SESSÃO <<<");
 					context.RejectPrincipal();
 					await context.HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
 				}
