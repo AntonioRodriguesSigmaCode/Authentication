@@ -20,6 +20,8 @@ namespace Authentication.Data
 		public DbSet<Role> Roles { get; set; }
 		public DbSet<Permissao> Permissoes { get; set; }
 
+		public DbSet<UtilizadorRole> UtilizadorRole { get; set; }
+		public DbSet<RolePermissao> RolePermissoe { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -28,11 +30,11 @@ namespace Authentication.Data
 			modelBuilder.Entity<UtilizadorRole>()
 				.HasKey(ur => new { ur.UtilizadorId, ur.RoleId });
 
-			// relação entre role e permissao (Um para Muitos)
-			modelBuilder.Entity<Role>()
-				.HasMany(e => e.Permissoes)
-				.WithOne(e => e.Role)
-				.HasForeignKey(e => e.RoleId);
+			modelBuilder.Entity<RolePermissao>()
+				.HasKey(rp => new { rp.RoleId, rp.PermissaoId });
+
+			modelBuilder.Entity<UtilizadorRole>()
+				.ToTable("UtilizadorRole");
 		}
 	}
 }

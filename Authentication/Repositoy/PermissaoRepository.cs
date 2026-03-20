@@ -1,7 +1,7 @@
-﻿using Authentication.Interface;
+﻿using Authentication.Data;
+using Authentication.Interface;
+using Authentication.Model;
 using Microsoft.EntityFrameworkCore;
-using projetoAPI.Data;
-using projetoAPI.Model;
 
 namespace Authentication.Repositoy
 {
@@ -16,14 +16,14 @@ namespace Authentication.Repositoy
 
 		public async Task<Permissao> CreatePermissaoAsync(string nomePermissao)
 		{
-			var existe = await _context.Permissoes.FirstOrDefaultAsync(x => x.Nome == nomePermissao);
+			//var existe = await _context.Permissoes.FirstOrDefaultAsync(x => x.Nome == nomePermissao);
 
-			if (existe != null)
-				return null;
+			//if (existe != null)
+			//	return null;
 
 			var permissao = new Permissao { Nome = nomePermissao };
-			_context.Permissoes.Add(permissao);
-			await _context.SaveChangesAsync();
+			//_context.Permissoes.Add(permissao);
+			//await _context.SaveChangesAsync();
 
 			return permissao;
 		}
@@ -31,25 +31,25 @@ namespace Authentication.Repositoy
 		public async Task<bool> AtribuirPermissaoAsync(int roleId, int permissaoId)
 		{
 			// 1️⃣ Buscar a role e a permissão
-			var role = await _context.Roles
-				.Include(r => r.Permissoes) // Inclui a lista de permissões da role
-				.FirstOrDefaultAsync(r => r.Id == roleId);
+			//var role = await _context.Roles
+			//	.Include(r => r.Permissoes) // Inclui a lista de permissões da role
+			//	.FirstOrDefaultAsync(r => r.Id == roleId);
 
-			if (role == null) return false; // Role não existe
+			//if (role == null) return false; // Role não existe
 
-			var permissao = await _context.Permissoes.FindAsync(permissaoId);
-			if (permissao == null) return false; // Permissão não existe
+			//var permissao = await _context.Permissoes.FindAsync(permissaoId);
+			//if (permissao == null) return false; // Permissão não existe
 
 			// 2️⃣ Verificar se a permissão já pertence à role
-			if (role.Permissoes.Any(p => p.Id == permissaoId))
-				return false; // Já atribuída
+			//if (role.Permissoes.Any(p => p.Id == permissaoId))
+			//	return false; // Já atribuída
 
-			// 3️⃣ Atribuir a permissão à role
-			permissao.Role = role;   // Atualiza a FK
-			role.Permissoes.Add(permissao); // Atualiza a coleção
+			//// 3️⃣ Atribuir a permissão à role
+			//permissao.Role = role;   // Atualiza a FK
+			//role.Permissoes.Add(permissao); // Atualiza a coleção
 
 			// 4️⃣ Guardar alterações
-			await _context.SaveChangesAsync();
+			//await _context.SaveChangesAsync();
 
 			return true;
 		}

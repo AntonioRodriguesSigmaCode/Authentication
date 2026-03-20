@@ -1,8 +1,8 @@
-﻿using Authentication.Interface;
+﻿using Authentication.Data;
+using Authentication.Interface;
+using Authentication.Model;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using projetoAPI.Data;
-using projetoAPI.Model;
 
 namespace Authentication.Repositoy
 {
@@ -17,14 +17,14 @@ namespace Authentication.Repositoy
 
 		public async Task<Permissao> CreatePermissaoAsync(string nomePermissao)
 		{
-			var existe = await _context.Permissoes.FirstOrDefaultAsync(x => x.Nome == nomePermissao);
+			//var existe = await _context.Permissoes.FirstOrDefaultAsync(x => x.Nome == nomePermissao);
 
-			if (existe == null)
+			//if (existe == null)
 				return null;
 
 			var permissao = new Permissao { Nome = nomePermissao };
-			_context.Permissoes.Add(permissao);
-			await _context.SaveChangesAsync();
+			//_context.Permissoes.Add(permissao);
+			//await _context.SaveChangesAsync();
 
 			return permissao;
 		}

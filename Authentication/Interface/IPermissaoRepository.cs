@@ -1,4 +1,4 @@
-﻿using projetoAPI.Model;
+﻿using Authentication.Model;
 
 namespace Authentication.Interface
 {

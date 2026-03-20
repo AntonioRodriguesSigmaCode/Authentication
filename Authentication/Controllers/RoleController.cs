@@ -1,7 +1,7 @@
 ﻿using Authentication.Interface;
 using Authentication.Mappers;
 using Microsoft.AspNetCore.Mvc;
-using projetoAPI.Service;
+
 
 
 
@@ -28,24 +28,24 @@ namespace Authentication.Controllers
 
 			return Ok(role);
 		}
-		[HttpPost("atribuir-role")]
-		public async Task<IActionResult> AtribuirRole(int userId, int roleId)
-		{
-			var user = await _repo.AtribuirRoleAsync(userId, roleId);
+		//[HttpPost("atribuir-role")]
+		//public async Task<IActionResult> AtribuirRole(int userId, int roleId)
+		//{
+		//	var user = await _repo.AtribuirRoleAsync(userId, roleId);
 
-			if (user == null)
-				return BadRequest("Não existe utilizador ou role");
+		//	if (user == null)
+		//		return BadRequest("Não existe utilizador ou role");
 
-			return Ok(user.ToUserDto());
-		}
+		//	return Ok(user.ToUserDto());
+		//}
 
-		[HttpPost("getAll")]
-		public async Task<IActionResult> GetAll()
-		{
-			var roles = await _repo.GetAllAsync();
-			var rolesDto = roles.Select(s => s.MapToDto());
+		//[HttpPost("getAll")]
+		//public async Task<IActionResult> GetAll()
+		//{
+		//	var roles = await _repo.GetAllAsync();
+		//	var rolesDto = roles.Select(s => s.MapToDto());
 
-			return Ok(rolesDto);
-		}
+		//	return Ok(rolesDto);
+		//}
 	}
 }

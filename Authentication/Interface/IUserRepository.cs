@@ -1,5 +1,5 @@
-﻿using projetoAPI.Dto.User;
-using projetoAPI.Model;
+﻿using Authentication.Dto.User;
+using Authentication.Model;
 
 namespace Authentication.Interface
 {

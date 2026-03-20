@@ -1,5 +1,5 @@
 ﻿using Authentication.Interface;
-using projetoAPI.Service;
+using Authentication.Service;
 
 namespace Authentication.Controllers
 {
